@@ -168,7 +168,7 @@ const GroupChatModal = ({ children }) => {
                 {/* Footer */}
                 <div className="mt-6 flex justify-end">
                   <button
-                    className="rounded-md bg-[#0d3528] text-white px-4 py-2 hover:bg-[#0d3528]/90 transition"
+                    className="rounded-md bg-[#1e3a8a] text-white px-4 py-2 hover:bg-[#1e3a8a]/90 transition"
                     onClick={handleSubmit}
                   >
                     Create Chat

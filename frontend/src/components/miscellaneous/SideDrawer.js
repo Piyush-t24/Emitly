@@ -132,8 +132,13 @@ function SideDrawer() {
             Search Users to chat
           </span>
         </button>
-        <h1 className="text-xl sm:text-2xl md:text-2xl font-bold font-sans">
-          RGVerse-Discussion
+        <h1 className="flex items-center gap-2 text-xl sm:text-2xl md:text-2xl font-bold text-[#1e3a8a] font-sans">
+          <img
+            src="/assets/EmitlyLogo/Logo2.png"
+            alt="Emitly Logo"
+            className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+          />
+          <span>Emitly - A Socket.IO Based Chat Application</span>
         </h1>
         <div className="flex items-center gap-4">
           <div className="relative group" ref={notificationRef}>
@@ -256,7 +261,7 @@ function SideDrawer() {
               />
               <button
                 onClick={handleSearch}
-                className="bg-[#0d3528] text-white px-3 py-2 rounded"
+                className="bg-[#1e3a8a] text-white px-3 py-2 rounded"
               >
                 Go
               </button>
