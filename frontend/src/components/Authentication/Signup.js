@@ -107,7 +107,7 @@ const Signup = () => {
             type="text"
             required
             placeholder="Enter your name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             onChange={handleChange}
             value={formData.name}
           />
@@ -122,7 +122,7 @@ const Signup = () => {
             type="email"
             required
             placeholder="Enter your email address"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             onChange={handleChange}
             value={formData.email}
           />
@@ -138,7 +138,7 @@ const Signup = () => {
               type={showPassword ? "text" : "password"}
               required
               placeholder="Enter password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 pr-12"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-12"
               onChange={handleChange}
               value={formData.password}
             />
@@ -162,7 +162,7 @@ const Signup = () => {
               type={showPassword ? "text" : "password"}
               required
               placeholder="Confirm password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 pr-12"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-12"
               onChange={handleChange}
               value={formData.confirmPassword}
             />
@@ -184,7 +184,7 @@ const Signup = () => {
             type="file"
             accept="image/*"
             onChange={(e) => postDetails(e.target.files?.[0])}
-            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-800 hover:file:bg-green-100"
+            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-800 hover:file:bg-blue-100"
           />
         </div>
       </div>
@@ -192,7 +192,7 @@ const Signup = () => {
       <button
         onClick={submitHandler}
         disabled={picLoading}
-        className="w-full bg-green-600 text-white py-2.5 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {picLoading && (
           <svg
