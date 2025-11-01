@@ -15,10 +15,24 @@ function Homepage() {
   return (
     <div className="w-full max-w-xl mx-auto p-4">
       {/* Header Box */}
-      <div className="w-full p-4 bg-white rounded-lg border border-gray-200 shadow-sm text-center my-8">
+      {/* <div className="w-full p-4 bg-white rounded-lg border border-gray-200 shadow-sm text-center my-8">
         <h1 className="text-4xl font-bold text-gray-800 font-work-sans">
-          RGVerse Discussion
+          Emitly
         </h1>
+      </div> */}
+      {/* <div className="w-full p-4 bg-white rounded-lg border border-gray-200 shadow-sm text-center my-8">
+        <img
+          src="/assets/EmitlyLogo/Emitly.png" // ← path to your logo file
+          alt="Emitly Logo"
+          className="mx-auto h-16 object-contain" // adjust size as needed
+        />
+      </div> */}
+      <div className="w-full h-20 sm:h-20 md:h-20 bg-white rounded-lg border border-gray-200 shadow-sm text-center my-8 overflow-visible flex items-center justify-center">
+        <img
+          src="/assets/EmitlyLogo/Emitly.png"
+          alt="Emitly Logo"
+          className="h-32 sm:h-40 md:h-48 w-auto object-contain"
+        />
       </div>
 
       {/* Tabs Container */}
@@ -29,7 +43,7 @@ function Homepage() {
             onClick={() => setActiveTab("login")}
             className={`flex-1 py-2 px-4 rounded-full transition-colors ${
               activeTab === "login"
-                ? "bg-green-600 text-white"
+                ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
             aria-pressed={activeTab === "login"}
@@ -40,7 +54,7 @@ function Homepage() {
             onClick={() => setActiveTab("signup")}
             className={`flex-1 py-2 px-4 rounded-full transition-colors ${
               activeTab === "signup"
-                ? "bg-green-600 text-white"
+                ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
             aria-pressed={activeTab === "signup"}
