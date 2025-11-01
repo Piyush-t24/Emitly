@@ -65,4 +65,38 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage };
+//@description     Mark messages as read
+//@route           PUT /api/message/read/:chatId
+//@access          Protected
+const markMessagesAsRead = asyncHandler(async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const userId = req.user._id;
+
+    // Find all unread messages in this chat that were not sent by the current user
+    const messages = await Message.find({
+      chat: chatId,
+      sender: { $ne: userId },
+      readBy: { $ne: userId },
+    });
+
+    // Add userId to readBy array for all messages
+    await Message.updateMany(
+      {
+        chat: chatId,
+        sender: { $ne: userId },
+        readBy: { $ne: userId },
+      },
+      {
+        $addToSet: { readBy: userId },
+      }
+    );
+
+    res.json({ success: true, messagesRead: messages.length });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+module.exports = { allMessages, sendMessage, markMessagesAsRead };

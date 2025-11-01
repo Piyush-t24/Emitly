@@ -115,6 +115,16 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("message read", (data) => {
+    const { chatId, userId } = data;
+
+    // Emit to all users in the chat that messages have been read
+    socket.in(chatId).emit("messages read", {
+      chatId,
+      userId,
+    });
+  });
+
   socket.off("setup", () => {
     console.log("USER DISCONNECTED");
     socket.leave(userData._id);
