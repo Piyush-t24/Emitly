@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
     "discussion": "file:..",
+    "emoji-picker-react": "^4.15.0",
     "lucide-react": "^0.544.0",
     "next-themes": "^0.4.6",
     "react": "^18.2.0",

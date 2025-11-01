@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { ArrowLeft, Send, Smile } from "lucide-react";
+import EmojiPicker from "emoji-picker-react";
 import axios from "axios";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
@@ -21,6 +22,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const inputRef = useRef(null);
+  const emojiPickerRef = useRef(null);
 
   const {
     selectedChat,
@@ -40,6 +44,39 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     },
   };
 
+  const markMessagesAsRead = async () => {
+    if (!selectedChat || !selectedChat._id) return;
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` },
+      };
+      await axios.put(`/api/message/read/${selectedChat._id}`, {}, config);
+
+      // Update local messages to reflect read status
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) => {
+          if (msg.sender._id !== user._id && !msg.readBy?.includes(user._id)) {
+            return {
+              ...msg,
+              readBy: [...(msg.readBy || []), user._id],
+            };
+          }
+          return msg;
+        })
+      );
+
+      // Emit read receipt via socket
+      if (socket) {
+        socket.emit("message read", {
+          chatId: selectedChat._id,
+          userId: user._id,
+        });
+      }
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
+  };
+
   const fetchMessages = async () => {
     if (!selectedChat || !selectedChat._id) return;
     try {
@@ -54,13 +91,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       setMessages(data);
       setLoading(false);
       socket.emit("join chat", selectedChat._id);
+
+      // Mark messages as read
+      markMessagesAsRead();
     } catch (error) {
       alert("Failed to load messages!");
     }
   };
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage && selectedChat?._id) {
+    // Handle Enter key press
+    if (event && event.key && event.key !== "Enter") return;
+
+    if (newMessage && selectedChat?._id) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -69,10 +112,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             Authorization: `Bearer ${user.token}`,
           },
         };
+        const messageContent = newMessage;
         setNewMessage("");
         const { data } = await axios.post(
           "/api/message",
-          { content: newMessage, chatId: selectedChat },
+          { content: messageContent, chatId: selectedChat },
           config
         );
         socket.emit("new message", data);
@@ -135,13 +179,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setFetchAgain(!fetchAgain);
       } else {
         setMessages([...messages, newMessageRecieved]);
+        // Mark as read if viewing the chat
+        markMessagesAsRead();
+      }
+    });
+
+    socket.on("messages read", (data) => {
+      if (
+        selectedChatCompare &&
+        selectedChatCompare._id === data.chatId &&
+        data.userId !== user._id
+      ) {
+        // Update messages when recipient reads them
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) => {
+            if (
+              msg.sender._id === user._id &&
+              !msg.readBy?.includes(data.userId)
+            ) {
+              return {
+                ...msg,
+                readBy: [...(msg.readBy || []), data.userId],
+              };
+            }
+            return msg;
+          })
+        );
       }
     });
 
     return () => {
       socket.off("message recieved");
+      socket.off("messages read");
     };
-  }, [selectedChatCompare, messages, fetchAgain, fetchNotifications]);
+  }, [selectedChatCompare, messages, fetchAgain, fetchNotifications, user._id]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -161,6 +232,37 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }, timerLength);
   };
+
+  const onEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji;
+    setNewMessage((prev) => prev + emoji);
+    setShowEmojiPicker(false);
+    // Focus back on input after emoji selection
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target) &&
+        !event.target.closest("[data-emoji-button]")
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showEmojiPicker]);
 
   return (
     <>
@@ -208,20 +310,51 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             {/* Input area */}
-            <div className="mt-3">
+            <div className="mt-3 relative">
               {istyping && (
                 <div className="mb-2">
                   <Lottie options={defaultOptions} width={70} />
                 </div>
               )}
-              <input
-                type="text"
-                placeholder="Enter a message..."
-                value={newMessage}
-                onChange={typingHandler}
-                onKeyDown={sendMessage}
-                className="w-full px-4 py-2 rounded-md bg-gray-300 placeholder-gray-600 focus:outline-none"
-              />
+              <div className="flex items-center gap-2">
+                <button
+                  data-emoji-button
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  className="flex items-center justify-center px-3 py-2 rounded-md bg-gray-300 hover:bg-gray-400 transition-colors"
+                  type="button"
+                >
+                  <Smile size={20} className="text-gray-700" />
+                </button>
+                {showEmojiPicker && (
+                  <div
+                    ref={emojiPickerRef}
+                    className="absolute bottom-full left-0 mb-2 z-50"
+                  >
+                    <EmojiPicker
+                      onEmojiClick={onEmojiClick}
+                      width={350}
+                      height={400}
+                      previewConfig={{ showPreview: false }}
+                    />
+                  </div>
+                )}
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Enter a message..."
+                  value={newMessage}
+                  onChange={typingHandler}
+                  onKeyDown={sendMessage}
+                  className="flex-1 px-4 py-2 rounded-md bg-gray-300 placeholder-gray-600 focus:outline-none"
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={!newMessage || !selectedChat?._id}
+                  className="flex items-center justify-center px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Send size={20} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
