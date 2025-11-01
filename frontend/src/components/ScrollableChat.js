@@ -70,7 +70,7 @@ const ReadReceipt = ({ message, currentUser, chat }) => {
   return (
     <span className="ml-0.5 text-[12px] inline-flex items-center leading-none">
       {isRead ? (
-        <span className="text-[#9de1fe] font-semibold">✓✓</span>
+        <span className="text-[#3bb3e3] font-semibold">✓✓</span>
       ) : isDelivered ? (
         <span className="text-gray-600 opacity-90">✓✓</span>
       ) : (
@@ -103,49 +103,43 @@ const ScrollableChat = ({ messages }) => {
                   />
                 </div>
               )}
-              <div
-                className={`flex items-end ${
-                  m.sender._id === user._id ? "ml-auto" : ""
+              <span
+                className={`relative inline-block px-4 py-2 rounded-2xl max-w-[75%] ${
+                  m.sender._id === user._id ? "bg-blue-200" : "bg-green-200"
                 }`}
                 style={{
                   marginLeft: isSameSenderMargin(messages, m, i, user._id),
                   marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                  whiteSpace: "normal",
                 }}
               >
-                <div
-                  className={`relative px-2.5 py-1.5 pb-1.5 rounded-2xl max-w-[75%] shadow-sm ${
-                    m.sender._id === user._id ? "bg-blue-200" : "bg-blue-100"
+                <span className="pr-12">
+                  {String(m.content)
+                    .replace(/\n/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim()}
+                </span>
+                <span
+                  className={`absolute bottom-1.5 right-2 flex items-center gap-0.5 leading-none ${
+                    m.sender._id === user._id
+                      ? "text-gray-600"
+                      : "text-gray-600"
                   }`}
-                  style={{
-                    borderRadius:
-                      m.sender._id === user._id
-                        ? "7.5px 7.5px 0 7.5px"
-                        : "7.5px 7.5px 7.5px 0",
-                  }}
                 >
-                  <div className="break-words pr-14 pb-0.5 text-[14.2px] leading-[19px]">
-                    {m.content}
-                  </div>
-                  <div
-                    className={`absolute bottom-1.5 right-2 flex items-center gap-0.5 leading-none ${
-                      m.sender._id === user._id
-                        ? "text-gray-600"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    <span className="text-[11px] whitespace-nowrap leading-none">
-                      {formatTime(m.createdAt || m.timestamp)}
-                    </span>
-                    {m.sender._id === user._id && (
-                      <ReadReceipt
-                        message={m}
-                        currentUser={user}
-                        chat={selectedChat}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
+                  <span className="text-[11px] whitespace-nowrap leading-none">
+                    {formatTime(m.createdAt || m.timestamp)}
+                  </span>
+                  {m.sender._id === user._id && (
+                    <ReadReceipt
+                      message={m}
+                      currentUser={user}
+                      chat={selectedChat}
+                    />
+                  )}
+                </span>
+              </span>
             </div>
           </div>
         ))}
