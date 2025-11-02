@@ -18,6 +18,8 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.15.0-47A248?logo=mongodb)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.3.3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Emitly-46E3FF?style=for-the-badge)](https://emitly.onrender.com/)
+
 [Features](#-features) • [Demo](#-demo--screenshots) • [Installation](#-installation) • [API Documentation](#-api-documentation) • [Deployment](#-deployment)
 
 </div>
@@ -142,6 +144,10 @@
 ---
 
 ## 📸 Demo & Screenshots
+
+### 🌐 Live Application
+
+**Try Emitly now:** [https://emitly.onrender.com/](https://emitly.onrender.com/)
 
 <div align="center">
 
@@ -500,6 +506,10 @@ This project was developed with assistance from AI tools to accelerate developme
 ---
 
 ## 🚀 Deployment
+
+### 🌐 Live Application
+
+**Live Demo:** [https://emitly.onrender.com/](https://emitly.onrender.com/)
 
 ### Deploying to Render.com
 
