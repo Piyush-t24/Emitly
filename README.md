@@ -1,4 +1,4 @@
-# 💬 Emitly - Real-Time Chat Application
+# 💬 Emitly - A Socket.IO Based Chat Application
 
 <div align="center">
 
