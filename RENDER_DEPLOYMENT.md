@@ -66,10 +66,35 @@ MONGO_URI=your-mongodb-atlas-connection-string
 - No CORS configuration needed
 - Real-time features work seamlessly
 
-### 7. Benefits
+### 7. Prevent Cold Starts (Keep-Alive)
+
+Render's free tier services spin down after 15 minutes of inactivity. To prevent cold starts:
+
+**Option 1: Built-in Keep-Alive (Recommended)**
+
+- The app automatically pings `/health` endpoint every 5 minutes when users have the app open
+- This works well if users are actively using the app
+
+**Option 2: External Ping Service (For 24/7 Uptime)**
+
+- Use a free service like [UptimeRobot](https://uptimerobot.com/) or [cron-job.org](https://cron-job.org/)
+- Set up a monitor to ping your Render URL every 5 minutes:
+  ```
+  URL: https://your-app-name.onrender.com/health
+  Interval: 5 minutes
+  Method: GET
+  ```
+
+**Health Check Endpoint:**
+
+- `GET /health` - Returns server status and uptime
+- Use this for keep-alive pings
+
+### 8. Benefits
 
 ✅ Single deployment  
 ✅ No CORS issues  
 ✅ Socket.io works perfectly  
 ✅ Cost effective (one service)  
-✅ Easy to manage
+✅ Easy to manage  
+✅ Built-in keep-alive service
