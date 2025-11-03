@@ -53,13 +53,15 @@
 - ✅ **Real-time messaging** with Socket.IO
 - ✅ **One-on-one and group chats**
 - ✅ **Read receipts** (sent, delivered, read status)
-- ✅ **User presence** (online/offline indicators)
+- ❗ **User presence** (online/offline indicators) — Not yet implemented
 - ✅ **Emoji support** with emoji picker
 - ✅ **Message deletion** (soft delete)
 - ✅ **Typing indicators**
 - ✅ **Notifications** for new messages
 - ✅ **Responsive design** with Tailwind CSS
 - ✅ **JWT-based authentication**
+
+> Note: Delete chat and user online status are not yet implemented.
 
 ---
 
@@ -87,7 +89,7 @@
 
 - **User Search**: Find and connect with other users
 - **User Profiles**: View and update user profiles
-- **Online Status**: See who's online in real-time
+- **Online Status**: See who's online in real-time — Coming soon
 - **Avatar Support**: Custom profile pictures
 
 ### 🔔 Notifications
@@ -411,6 +413,7 @@ Emitly/
 - Created Socket.IO event `messages read` to broadcast read status in real-time
 - Display read receipts with blue double ticks (similar to WhatsApp)
 
+<!--
 ### 3. **User Presence (Online/Offline Status)**
 
 **Challenge:** Showing real-time online/offline status of users.
@@ -421,6 +424,7 @@ Emitly/
 - Implemented `setup` socket event to register users when they connect
 - Added `get online status` socket event for clients to query status
 - Broadcast `user online` and `user offline` events on connection/disconnection
+-->
 
 ### 4. **CORS Configuration & Proxy Setup**
 
